@@ -1,15 +1,16 @@
 # holbertonschool-shell
 
-This repository contains projects and tasks focused on building a custom shell in C, as part of the Holberton School curriculum.
+This repository contains Shell scripting tasks completed as part of the Holberton School curriculum.
 
 ## Projects
 
-The repository includes various tasks and functionalities aimed at replicating the basic features of a Unix shell, such as:
+It includes various exercises to practice and master Unix shell commands, file manipulation, permissions, and input/output redirection.:
 
-- **Basics**: Fundamental shell commands and concepts.
-- **Init_files_variables_and_expansions**: Initialization of shell variables and expansions.
-- **IO_redirections_and_filters**: Handling input/output redirection and using filters.
-- **Permissions**: Managing file permissions and access control.
+- **Basics**: Fundamental shell commands and concepts (e.g., `ls`, `pwd`, `cp`, etc.).
+- **Init_files_variables_and_expansions**: Initialization and use of shell variables and expansions.
+- **IO_redirections_and_filters**: Handling input/output redirection and using filters in the shell.
+- **Permissions**: Managing file permissions and access control in Unix-like systems.
+- **File Manipulation Tasks**: Working with files, directories, and links (e.g., create, delete, move, and copy files).
 
 ## Requirements
 
