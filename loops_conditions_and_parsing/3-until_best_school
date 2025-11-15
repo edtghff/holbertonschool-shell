@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# displays Best School 10 times.
-
-COUNTER=0
-until [ $COUNTER -lt 10 ]
-do
-    echo "Best School"
-    (( COUNTER++ ))
+#Until loop
+count=1
+var="Best School"
+until [ $count -gt 10 ]; do   #gt --> until the condition is true --> where count is 11.
+    echo "$var"
+    ((count++))  
 done

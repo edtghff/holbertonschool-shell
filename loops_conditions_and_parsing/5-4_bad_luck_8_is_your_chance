@@ -1,18 +1,14 @@
 #!/usr/bin/env bash
-# displays Best School 10 times.
-
-COUNTER=1
-while [ "$COUNTER" -lt 11 ]
-do
-    if [ "$COUNTER" -eq 4 ]
-    then
+#Loop:
+count=1
+var="Best School"
+while [ $count -le 10 ]; do  
+    if [ $count -eq 4 ]; then
         echo "bad luck"
-    elif [ "$COUNTER" -eq 8 ]
-    then
-        echo "good luck"
-    else
-        echo "Best School"
+    elif [ $count -eq 8 ]; then
+	echo "good luck"
+    else 
+	echo "$var"
     fi
-    (( COUNTER++ ))
+    ((count++))
 done
-

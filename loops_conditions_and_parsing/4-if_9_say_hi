@@ -1,14 +1,15 @@
 #!/usr/bin/env bash
-# displays Best School 10 times.
+# Display "Best School" 10 times, but on the 9th iteration also print "Hi"
 
-COUNTER=0
-while [ "$COUNTER" -lt 11 ]
-do
-    if [ "$COUNTER" -eq 9 ]
-    then
+count=1
+var="Best School"
+
+while [ $count -le 10 ]; do
+    echo "$var"
+    
+    if [ $count -eq 9 ]; then
         echo "Hi"
-    else
-        echo "Best School"
     fi
-    (( COUNTER++ ))
+    
+    ((count++))
 done

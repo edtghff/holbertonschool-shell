@@ -1,16 +1,28 @@
 #!/usr/bin/env bash
-# displays the time for 12 hours and 59 minutes.
+#Clock loop
+hours=0
+minutes=0
 
-HOURS=0
-while [ "$HOURS" -lt 13 ]
-do
-    echo "Hour: $HOURS"
-    MINUTES=1
-    while [ "$MINUTES" -lt 60 ]
-    do
-        echo "$MINUTES"
-        (( MINUTES++ ))
-    done
-    (( HOURS++ ))
+echo "Hour: $hours"
+
+while true; do
+    ((minutes++))
+
+    if [ "$minutes" -ge 60 ]; then
+        ((hours++))
+        ((minutes = 0))
+        echo "Hour: $hours"
+    else
+        echo "$minutes"
+    fi
+
+    # Break AFTER printing 12:59
+    if [ "$hours" -eq 12 ] && [ "$minutes" -eq 59 ]; then
+        break
+    fi
+
+    # Prevent going to hour 13
+    if [ "$hours" -ge 13 ]; then
+        break
+    fi
 done
-

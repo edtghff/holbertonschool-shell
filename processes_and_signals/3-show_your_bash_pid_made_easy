@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+#Without PS? Use Nintendo
+pgrep -l bash

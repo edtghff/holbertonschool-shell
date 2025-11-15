@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#Shell PID no pgrep
+# shellcheck disable=SC2009
+ps aux -p $$ --forest | grep bash

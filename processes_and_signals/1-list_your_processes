@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+#Everything
+
+ps aux --forest
