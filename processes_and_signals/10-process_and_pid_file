@@ -1,26 +1,9 @@
 #!/usr/bin/env bash
-# 10-process_and_pid_file
-
-PIDFILE="/var/run/myscript.pid"
-
-# Create the PID file with this script's PID
-echo $$ > "$PIDFILE"
-
-# On Ctrl+C (SIGINT): complain but keep running
-trap 'echo "Y U no love me?!";' INT
-
-# On SIGTERM: complain, then exit (and cleanup via EXIT trap)
-trap 'echo "I hate the kill command"; exit' TERM
-
-# On SIGQUIT: just exit (and cleanup via EXIT trap)
-trap 'exit' QUIT
-
-# On any kind of normal exit: remove the PID file
-trap 'rm -f "$PIDFILE"' EXIT
-
-# Main loop
+#This is script for process
+echo $$ > /var/run/myscript.pid
+trap 'echo "Y U no love me?!"' SIGINT
+trap 'echo "I hate the kill command"; rm -rf /var/run/myscript.pid ' SIGTERM
+trap 'rm -rf  /var/run/myscript.pid;exit'  SIGQUIT
 while true; do
-    echo "To infinity and beyond"
-    sleep 2
+	echo "To infinity and beyond"
 done
-
