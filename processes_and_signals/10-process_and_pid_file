@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
-#What?
-trap 'echo "I hate the kill command"' SIGTERM
-trap 'echo "Y U no love me?!"' SIGINT
-trap 'rm -f /var/run/myscript.pid; exit 0' SIGQUIT SIGTERM
-pgrep 10-process_and_pid_file > /var/run/myscript.pid
-chmod 777 /var/run/myscript.pid
-chmod +t /var/run
-chmod +t /var
-while true; do 
-     echo "To infinity and beyond"
-     sleep 2     
+# 10-process_and_pid_file
+
+PIDFILE="/var/run/myscript.pid"
+
+# Create the PID file with this script's PID
+echo $$ > "$PIDFILE"
+
+# On Ctrl+C (SIGINT): complain but keep running
+trap 'echo "Y U no love me?!";' INT
+
+# On SIGTERM: complain, then exit (and cleanup via EXIT trap)
+trap 'echo "I hate the kill command"; exit' TERM
+
+# On SIGQUIT: just exit (and cleanup via EXIT trap)
+trap 'exit' QUIT
+
+# On any kind of normal exit: remove the PID file
+trap 'rm -f "$PIDFILE"' EXIT
+
+# Main loop
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
 done
 
-     
