@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
-#This is script for process
-echo $$ > /var/run/myscript.pid
-trap 'echo "Y U no love me?!"' SIGINT
-trap 'echo "I hate the kill command"; rm -rf /var/run/myscript.pid ' SIGTERM
-trap 'rm -rf  /var/run/myscript.pid;exit'  SIGQUIT
+# This script creates /var/run/myscript.pid with its PID
+# and prints "To infinity and beyond" indefinitely.
+
+PIDFILE="/var/run/myscript.pid"
+
+echo "$$" > "$PIDFILE"
+
+trap 'echo "Y U no love me?!";' SIGINT
+trap 'echo "I hate the kill command"; rm -f "$PIDFILE"; exit' SIGTERM
+trap 'rm -f "$PIDFILE"; exit' SIGQUIT
+
 while true; do
-	echo "To infinity and beyond"
+    echo "To infinity and beyond"
+    sleep 2
 done
+
