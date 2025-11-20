@@ -1,37 +1,44 @@
 #!/usr/bin/env bash
-# Init-like script to manage the manage_my_process daemon
 
 PIDFILE="/var/run/my_process.pid"
+PROCESS="/root/holbertonschool-shell/processes_and_signals/manage_my_process"  # <-- Update if needed
 PROCESS_NAME="manage_my_process"
-PROCESS_PATH="$(dirname "$0")/$PROCESS_NAME"
 
 case "$1" in
     start)
-        "$PROCESS_PATH" &
+        # Start process in background
+        "$PROCESS" &
         echo $! > "$PIDFILE"
         echo "${PROCESS_NAME} started"
         ;;
+
     stop)
         if [ -f "$PIDFILE" ]; then
-            PID="$(cat "$PIDFILE")"
-            # Try to kill the process; ignore errors
+            PID=$(cat "$PIDFILE")
             kill "$PID" 2>/dev/null
+
+            # Ensure the process is dead before deleting PID file
+            sleep 1
             rm -f "$PIDFILE"
         fi
         echo "${PROCESS_NAME} stopped"
         ;;
+
     restart)
         # Stop
         if [ -f "$PIDFILE" ]; then
-            PID="$(cat "$PIDFILE")"
+            PID=$(cat "$PIDFILE")
             kill "$PID" 2>/dev/null
+            sleep 1
             rm -f "$PIDFILE"
         fi
-        # Start
-        "$PROCESS_PATH" &
+
+        # Start again
+        "$PROCESS" &
         echo $! > "$PIDFILE"
         echo "${PROCESS_NAME} restarted"
         ;;
+
     *)
         echo "Usage: manage_my_process {start|stop|restart}"
         exit 1
