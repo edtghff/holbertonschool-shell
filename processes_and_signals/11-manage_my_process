@@ -2,35 +2,33 @@
 # Script that manages the manage_my_process daemon (start|stop|restart)
 
 PIDFILE="/var/run/my_process.pid"
-PROCESS_NAME="manage_my_process"
-PROCESS_PATH="$(dirname "$0")/$PROCESS_NAME"
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: manage_my_process {start|stop|restart}"
+    exit 1
+fi
 
 case "$1" in
     start)
-        # Start manage_my_process in the background
-        "$PROCESS_PATH" &
+        ./manage_my_process &
         echo $! > "$PIDFILE"
-        echo "${PROCESS_NAME} started"
+        echo "manage_my_process started"
         ;;
     stop)
         if [ -f "$PIDFILE" ]; then
-            PID="$(cat "$PIDFILE")"
-            kill "$PID" 2>/dev/null
+            kill "$(cat "$PIDFILE")" 2>/dev/null
             rm -f "$PIDFILE"
         fi
-        echo "${PROCESS_NAME} stopped"
+        echo "manage_my_process stopped"
         ;;
     restart)
-        # Stop if running
         if [ -f "$PIDFILE" ]; then
-            PID="$(cat "$PIDFILE")"
-            kill "$PID" 2>/dev/null
+            kill "$(cat "$PIDFILE")" 2>/dev/null
             rm -f "$PIDFILE"
         fi
-        # Start again
-        "$PROCESS_PATH" &
+        ./manage_my_process &
         echo $! > "$PIDFILE"
-        echo "${PROCESS_NAME} restarted"
+        echo "manage_my_process restarted"
         ;;
     *)
         echo "Usage: manage_my_process {start|stop|restart}"
