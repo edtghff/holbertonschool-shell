@@ -1,27 +1,24 @@
 #!/usr/bin/env bash
-# This script creates a PID file and handles multiple signals
+# Script that writes its PID to a file, handles signals, and runs forever
 
 PID_FILE="/var/run/myscript.pid"
 
-# Создаём файл с PID текущего процесса
-echo "$$" > "$PID_FILE" || {
-    # Если не удалось записать PID — выходим с ошибкой
-    exit 1
-}
+# Записываем PID скрипта в файл
+echo "$$" > "$PID_FILE" || exit 1
 
-# SIGINT (Ctrl+C)
+# Обработчик SIGINT (Ctrl+C)
 handle_int() {
     echo "Y U no love me?!"
 }
 
-# SIGTERM (kill/pkill по умолчанию)
+# Обработчик SIGTERM (kill / pkill)
 handle_term() {
     echo "I hate the kill command"
     rm -f "$PID_FILE"
     exit 0
 }
 
-# SIGQUIT
+# Обработчик SIGQUIT
 handle_quit() {
     rm -f "$PID_FILE"
     exit 0
