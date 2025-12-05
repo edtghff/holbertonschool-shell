@@ -3,11 +3,8 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# Если нет прав на /var/run, создаём файл локально
-if ! echo "$$" > "$PID_FILE" 2>/dev/null; then
-    PID_FILE="myscript.pid"
-    echo "$$" > "$PID_FILE"
-fi
+# Записываем PID — если нет прав → пусть падает (так и должно быть в checker)
+echo "$$" > "$PID_FILE"
 
 handle_int() {
     echo "Y U no love me?!"
