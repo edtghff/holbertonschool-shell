@@ -2,7 +2,7 @@
 # This script creates a PID file and handles multiple signals
 
 # Create PID file first thing
-echo $$ > /tmp/myscript.pid
+echo $$ > /var/run/myscript.pid
 
 # Ensure file is written
 sync
