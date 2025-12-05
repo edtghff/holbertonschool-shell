@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#  This script creates a PID file and handles multiple signals
 
 PID_FILE="/var/run/myscript.pid"
 
