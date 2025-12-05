@@ -1,19 +1,37 @@
 #!/usr/bin/env bash
-# This script creates a PID file and handles multiple signals
 
-# Create PID file first thing
-echo $$ > /var/run/myscript.pid
+PID_FILE="/var/run/myscript.pid"
 
-# Ensure file is written
-sync
+# Записываем PID скрипта в файл
+echo $$ > "$PID_FILE"
 
-# Signal handlers
-trap 'echo "I hate the kill command"' SIGTERM
-trap 'echo "Y U no love me?!"' SIGINT
-trap 'rm -f /tmp/myscript.pid; exit 0' SIGQUIT
+# Обработчик SIGINT (Ctrl+C)
+handle_sigint() {
+    echo "Y U no love me?!"
+}
 
-# Main loop
-while true; do
+# Обработчик SIGTERM (pkill / kill по умолчанию)
+handle_sigterm() {
+    echo "I hate the kill command"
+    rm -f "$PID_FILE"
+    exit 0
+}
+
+# Обработчик SIGQUIT
+handle_sigquit() {
+    rm -f "$PID_FILE"
+    exit 0
+}
+
+# Назначаем обработчики сигналов
+trap 'handle_sigint' INT
+trap 'handle_sigterm' TERM
+trap 'handle_sigquit' QUIT
+
+# Бесконечный цикл
+while true
+do
     echo "To infinity and beyond"
-    sleep 2
+    sleep 1
 done
+
