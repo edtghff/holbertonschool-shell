@@ -3,33 +3,31 @@
 
 PID_FILE="/var/run/myscript.pid"
 
-# Записываем PID скрипта в файл
-echo "$$" > "$PID_FILE" || exit 1
+# Если нет прав на /var/run, создаём файл локально
+if ! echo "$$" > "$PID_FILE" 2>/dev/null; then
+    PID_FILE="myscript.pid"
+    echo "$$" > "$PID_FILE"
+fi
 
-# Обработчик SIGINT (Ctrl+C)
 handle_int() {
     echo "Y U no love me?!"
 }
 
-# Обработчик SIGTERM (kill / pkill)
 handle_term() {
     echo "I hate the kill command"
     rm -f "$PID_FILE"
     exit 0
 }
 
-# Обработчик SIGQUIT
 handle_quit() {
     rm -f "$PID_FILE"
     exit 0
 }
 
-# Назначаем обработчики сигналов
 trap 'handle_int' INT
 trap 'handle_term' TERM
 trap 'handle_quit' QUIT
 
-# Бесконечный цикл
 while true
 do
     echo "To infinity and beyond"
