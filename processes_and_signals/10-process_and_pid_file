@@ -1,34 +1,21 @@
 #!/usr/bin/env bash
-# This script creates a PID file, prints indefinitely, and handles signals properly.
+#This script prints "To infinity and beyond" indefinitely with a 2-second pause
+# shellcheck disable=SC2009
 
-# Create PID file
+# PID faylını yarat və öz PID-ni ora yaz
 echo $$ > /var/run/myscript.pid
 
-# SIGTERM handler
-term_handler() {
-    echo "I hate the kill command"
-    rm -f /var/run/myscript.pid
-    exit 0
-}
+# SIGTERM → I hate the kill command
+trap 'echo "I hate the kill command"' SIGTERM
 
-# SIGINT handler
-int_handler() {
-    echo "Y U no love me?!"
-}
+# SIGINT → Y U no love me?!
+trap 'echo "Y U no love me?!"' SIGINT
 
-# SIGQUIT handler
-quit_handler() {
-    rm -f /var/run/myscript.pid
-    exit 0
-}
+# SIGQUIT və SIGTERM → faylı sil və skripti dayandır
+trap 'rm -f /var/run/myscript.pid; exit 0' SIGQUIT SIGTERM
 
-trap term_handler SIGTERM
-trap int_handler SIGINT
-trap quit_handler SIGQUIT
-
-while true
-do
+# Sonsuz döngü
+while true; do
     echo "To infinity and beyond"
     sleep 2
 done
-
