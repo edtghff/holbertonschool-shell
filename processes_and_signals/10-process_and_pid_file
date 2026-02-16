@@ -1,24 +1,21 @@
 #!/usr/bin/env bash
-# This script creates a PID file, displays messages indefinitely, 
-# and handles signals to display custom messages and terminate gracefully.
+#This script prints "To infinity and beyond" indefinitely with a 2-second pause
+# shellcheck disable=SC2009
 
-# Create a PID file with the current process ID
+# PID faylını yarat və öz PID-ni ora yaz
 echo $$ > /var/run/myscript.pid
 
-# Define a cleanup function to delete the PID file and terminate gracefully
-cleanup() {
-  echo "Terminating..."
-  rm -f /var/run/myscript.pid
-  exit 0
-}
-
-# Define the signal handling
+# SIGTERM → I hate the kill command
 trap 'echo "I hate the kill command"' SIGTERM
-trap 'echo "Y U no love me?!"; cleanup' SIGINT
-trap 'cleanup' SIGQUIT
 
-# Display a message indefinitely
+# SIGINT → Y U no love me?!
+trap 'echo "Y U no love me?!"' SIGINT
+
+# SIGQUIT və SIGTERM → faylı sil və skripti dayandır
+trap 'rm -f /var/run/myscript.pid; exit 0' SIGQUIT SIGTERM
+
+# Sonsuz döngü
 while true; do
-  echo "To infinity and beyond"
-  sleep 1
+    echo "To infinity and beyond"
+    sleep 2
 done
