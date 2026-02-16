@@ -1,33 +1,19 @@
 #!/usr/bin/env bash
-# Script that writes its PID to a file, handles signals, and runs forever
+# This script creates the file /var/run/holbertonscript.pid containing its PID
+# Displays To infinity and beyond indefinitely
+# Displays I hate the kill command when receiving a SIGTERM signal
+# Displays Y U no love me?! when receiving a SIGINT signal
+# Deletes the file /var/run/holbertonscript.pid and terminate itself when receiving a SIGQUIT or SIGTERM signal
 
-PID_FILE="/var/run/myscript.pid"
-
-# Записываем PID — если нет прав → пусть падает (так и должно быть в checker)
-echo "$$" > "$PID_FILE"
-
-handle_int() {
-    echo "Y U no love me?!"
+function love() {
+    rm /var/run/holbertonscript.pid
+    exit
 }
 
-handle_term() {
-    echo "I hate the kill command"
-    rm -f "$PID_FILE"
-    exit 0
-}
+trap "echo I hate the kill command;love" SIGTERM
+trap "echo Y U no love me?!;love" SIGINT
 
-handle_quit() {
-    rm -f "$PID_FILE"
-    exit 0
-}
-
-trap 'handle_int' INT
-trap 'handle_term' TERM
-trap 'handle_quit' QUIT
-
-while true
-do
-    echo "To infinity and beyond"
-    sleep 1
+echo $$ >> /var/run/holbertonscript.pid
+while [ true ]; do
+    echo To infinity and beyond;
 done
-
