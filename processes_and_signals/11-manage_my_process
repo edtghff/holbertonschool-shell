@@ -1,38 +1,52 @@
 #!/usr/bin/env bash
-# Script that manages the manage_my_process daemon (start|stop|restart)
+#This script prints "To infinity and beyond" indefinitely with a 2-second pause
+# shellcheck disable=SC2009
 
-PIDFILE="/var/run/my_process.pid"
+# Path to PID file
+PID_FILE="/var/run/my_process.pid"
+# Path to the managed script
+SCRIPT="/usr/local/bin/manage_my_process"
 
-if [ "$#" -ne 1 ]; then
-    echo "Usage: manage_my_process {start|stop|restart}"
-    exit 1
-fi
+start() {
+    "$SCRIPT" &
+    echo $! > "$PID_FILE"
+    echo "manage_my_process started"
+}
+
+stop() {
+    if [ -f "$PID_FILE" ]; then
+        kill "$(cat $PID_FILE)"
+        rm -f "$PID_FILE"
+    fi
+    echo "manage_my_process stopped"
+}
+
+restart() {
+    # Stop silently
+    if [ -f "$PID_FILE" ]; then
+        kill "$(cat $PID_FILE)" 2>/dev/null
+        rm -f "$PID_FILE"
+    fi
+    # Start silently
+    "$SCRIPT" &
+    echo $! > "$PID_FILE"
+    # Only this message is shown
+    echo "manage_my_process restarted"
+}
 
 case "$1" in
     start)
-        ./manage_my_process &
-        echo $! > "$PIDFILE"
-        echo "manage_my_process started"
+        start
         ;;
     stop)
-        if [ -f "$PIDFILE" ]; then
-            kill "$(cat "$PIDFILE")" 2>/dev/null
-            rm -f "$PIDFILE"
-        fi
-        echo "manage_my_process stopped"
+        stop
         ;;
     restart)
-        if [ -f "$PIDFILE" ]; then
-            kill "$(cat "$PIDFILE")" 2>/dev/null
-            rm -f "$PIDFILE"
-        fi
-        ./manage_my_process &
-        echo $! > "$PIDFILE"
-        echo "manage_my_process restarted"
+        restart
         ;;
     *)
         echo "Usage: manage_my_process {start|stop|restart}"
-        exit 1
         ;;
 esac
 
+exit 0
